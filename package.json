@@ -1,0 +1,96 @@
+{
+  "name": "@x1a0f3n9/dsh-session-timeline",
+  "version": "0.1.0",
+  "description": "Rewind, delete, and regenerate conversation turns for xfdsh / DeepSeek Harness.",
+  "author": "LunFengChen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LunFengChen/dsh-session-timeline.git"
+  },
+  "homepage": "https://github.com/LunFengChen/dsh-session-timeline",
+  "bugs": {
+    "url": "https://github.com/LunFengChen/dsh-session-timeline/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/client.js.map",
+    "cordis.patch.yml",
+    "lib/types/**/*.d.ts",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@x1a0f3n9/dsh-client-locale",
+        "@x1a0f3n9/dsh-client-ui-chat",
+        "@x1a0f3n9/dsh-client-ui-commands",
+        "@x1a0f3n9/dsh-client-ui-conversation",
+        "@x1a0f3n9/dsh-client-ui-settings"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "build": "tsdown"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.0",
+    "@deepseek-ai/schemastery": ">=3.0.0",
+    "@x1a0f3n9/dsh-agent": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-api-session-controller": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-attachment": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-client-ui-primitives": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-commands": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-fs": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-home-paths": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-llm": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-sandbox": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-session": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-settings": ">=0.1.5-rc.2",
+    "@x1a0f3n9/dsh-tools": ">=0.1.5-rc.2",
+    "react": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@x1a0f3n9/dsh-client-ui-primitives": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "tsdown": "^0.16.0"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "xfdsh",
+    "plugin",
+    "rewind",
+    "session"
+  ]
+}
