@@ -1,8 +1,8 @@
 /** Composer compact control that runs `/compact` for the current session. */
 
 import { useCallback, useRef, useState, type MouseEvent, type ReactNode } from 'react'
-import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
-import { Toast, Tooltip } from '@x1a0f3n9/dsh-client-ui-primitives'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
+import { Toast, Tooltip } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { RewindKey } from './locales.ts'
 import { CLASS } from './styles.ts'
 

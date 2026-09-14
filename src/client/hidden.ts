@@ -6,7 +6,7 @@
  * @module dsh-session-timeline/client/hidden
  */
 
-import type { ChatConversationViewNode, CommandNode } from '@x1a0f3n9/dsh-client-ui-chat/client'
+import type { ChatConversationViewNode, CommandNode } from '@deepseek-ai/dsh-client-ui-chat/client'
 
 /** Minimal chat snapshot reader the hiding logic needs. */
 export interface HiddenChat {

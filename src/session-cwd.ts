@@ -1,6 +1,6 @@
 /**
  * Session-cwd resolution for snapshot tracking reads, mirroring the fs tools'
- * own rule (`@x1a0f3n9/dsh-tool-fs/session-cwd.ts`): relative paths
+ * own rule (`@deepseek-ai/dsh-tool-fs/session-cwd.ts`): relative paths
  * resolve against the calling agent's session workspace
  * (`exec.agent.session.header.cwd`), not the server's launch dir.
  *
@@ -12,8 +12,8 @@
  * @module dsh-session-timeline/session-cwd
  */
 
-import type { ToolExecution } from '@x1a0f3n9/dsh-tools'
-import { canonicalPath } from '@x1a0f3n9/dsh-sandbox'
+import type { ToolExecution } from '@deepseek-ai/dsh-tools'
+import { canonicalPath } from '@deepseek-ai/dsh-sandbox'
 
 /** Parent-traversal probe shared with the fs tools' session-cwd resolution. */
 const PARENT_PATH_SEGMENT = /(?:^|[\\/])\.\.(?:[\\/]|$)/

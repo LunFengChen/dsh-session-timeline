@@ -12,7 +12,7 @@
  */
 
 import { hiddenSeqsOf, type HiddenChat } from './hidden.ts'
-import type { SelectOption } from '@x1a0f3n9/dsh-client-ui-commands/client'
+import type { SelectOption } from '@deepseek-ai/dsh-client-ui-commands/client'
 import type { RewindKey } from './locales.ts'
 
 type Translate = (key: RewindKey, params?: Record<string, unknown>) => string

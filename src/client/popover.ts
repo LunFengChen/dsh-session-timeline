@@ -14,8 +14,8 @@
  * @module dsh-session-timeline/client/popover
  */
 
-import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
-import type { CommandNode } from '@x1a0f3n9/dsh-client-ui-chat/client'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { CommandNode } from '@deepseek-ai/dsh-client-ui-chat/client'
 import { hasFileImpact, type ChatOf, type ChatWatch, type HiddenChat } from './hidden.ts'
 import type { RewindKey } from './locales.ts'
 import { CLASS } from './styles.ts'

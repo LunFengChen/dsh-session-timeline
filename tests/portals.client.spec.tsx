@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
 import { runRewindAndFill } from '../src/client/portals.tsx'
 
 function sessionFace(overrides: Partial<SessionFace> = {}): SessionFace {

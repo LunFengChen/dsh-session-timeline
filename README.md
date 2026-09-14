@@ -40,10 +40,10 @@ Start the fork Web profile to use **Session Timeline**. It is installed with the
 ### Install into another profile
 
 ```sh
-xfdsh plugin --profile web add github:LunFengChen/dsh-session-timeline
+xfdsh plugin --profile web add @x1a0f3n9/dsh-session-timeline
 ```
 
-The package exports a `dsh.bundle` patch, so the profile installer can mount it through the normal plugin mechanism. This repository is the plugin source; xfdsh preinstalls `github:LunFengChen/dsh-session-timeline`.
+The package exports a `dsh.bundle` patch, so the profile installer can mount it through the normal plugin mechanism. This repository is the plugin source. xfdsh preinstalls `@x1a0f3n9/dsh-session-timeline` from npm; `github:LunFengChen/dsh-session-timeline` remains a source fallback.
 
 ### Rewind a conversation
 
@@ -120,6 +120,6 @@ Rewinding changes the request prefix at the selected target, so provider cache r
 <details>
 <summary>Working context for maintainers — click to expand</summary>
 
-The package name is `@x1a0f3n9/dsh-session-timeline`. There is no `@deepseek-ai` alias.
+The package name is `@x1a0f3n9/dsh-session-timeline`. Host and client imports use official `@deepseek-ai/dsh-*` names so xfdsh can remap them.
 
 </details>

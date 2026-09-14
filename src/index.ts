@@ -24,12 +24,12 @@
  */
 
 import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@x1a0f3n9/dsh-settings'
-import type { Agent } from '@x1a0f3n9/dsh-agent'
-import type { CommandInvocation, CommandResult } from '@x1a0f3n9/dsh-commands'
-import type { FileSystem, FsTarget } from '@x1a0f3n9/dsh-fs'
-import { SessionLogOffset, SessionSeq, type Session, type SessionEvent } from '@x1a0f3n9/dsh-session'
-import type { PostToolDecision, ToolExecution, ToolExecutionResult } from '@x1a0f3n9/dsh-tools'
+import type {} from '@deepseek-ai/dsh-settings'
+import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { CommandInvocation, CommandResult } from '@deepseek-ai/dsh-commands'
+import type { FileSystem, FsTarget } from '@deepseek-ai/dsh-fs'
+import { SessionLogOffset, SessionSeq, type Session, type SessionEvent } from '@deepseek-ai/dsh-session'
+import type { PostToolDecision, ToolExecution, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
 import { unlink } from 'node:fs/promises'
 import { translate, type HostKey, type HostLocaleId } from './locales.ts'
 import { eventsOf } from './session-events.ts'

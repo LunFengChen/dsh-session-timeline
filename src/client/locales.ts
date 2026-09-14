@@ -68,7 +68,7 @@ export const zh = {
 /** The rewind namespace key union. */
 export type RewindKey = keyof typeof zh
 
-declare module '@x1a0f3n9/dsh-client-ui-slots' {
+declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The in-place rewind controls' copy. */
     rewind: RewindKey

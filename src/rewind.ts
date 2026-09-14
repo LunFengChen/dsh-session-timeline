@@ -11,7 +11,7 @@
  * @module dsh-session-timeline/rewind
  */
 
-import type { SessionEvent, UserMessage } from '@x1a0f3n9/dsh-session'
+import type { SessionEvent, UserMessage } from '@deepseek-ai/dsh-session'
 
 /** Which of the two rewind modes a rewind executes. */
 export type RewindMode = 'chat' | 'both'

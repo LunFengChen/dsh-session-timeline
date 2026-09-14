@@ -1,13 +1,13 @@
 /** Timeline-owned destructive actions for durable conversation rows. */
 
 import { useCallback, useState, type ReactNode } from 'react'
-import type { AttachmentIdType } from '@x1a0f3n9/dsh-attachment'
-import type { PromptContentPart } from '@x1a0f3n9/dsh-api-session-controller/types'
-import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
-import { SessionSeq } from '@x1a0f3n9/dsh-session/types'
+import type { AttachmentIdType } from '@deepseek-ai/dsh-attachment'
+import type { PromptContentPart } from '@deepseek-ai/dsh-api-session-controller/types'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
+import { SessionSeq } from '@deepseek-ai/dsh-session/types'
 import {
   IconRefreshOutline16, IconTrashOutline16, RiskConfirmation, Toast, Tooltip,
-} from '@x1a0f3n9/dsh-client-ui-primitives'
+} from '@deepseek-ai/dsh-client-ui-primitives'
 import type { RewindKey } from './locales.ts'
 import { rewindLog } from './log.ts'
 import { CLASS } from './styles.ts'

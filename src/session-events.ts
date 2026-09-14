@@ -9,7 +9,7 @@
  * @module dsh-session-timeline/session-events
  */
 
-import type { Session, SessionEvent } from '@x1a0f3n9/dsh-session'
+import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
 
 /**
  * Read the full event log in log order.

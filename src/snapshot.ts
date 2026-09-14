@@ -58,7 +58,7 @@ import { createHash } from 'node:crypto'
 import type { Stats } from 'node:fs'
 import { lstat, mkdir, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
-import { resolveDshHome } from '@x1a0f3n9/dsh-home-paths'
+import { resolveDshHome } from '@deepseek-ai/dsh-home-paths'
 
 /** Sub-directory of the harness home holding this plugin's snapshots. */
 const SNAPSHOT_DIR_NAME = 'rewind-snapshots'

@@ -29,12 +29,12 @@
 
 import { createElement } from 'react'
 import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
-import type { SessionId } from '@x1a0f3n9/dsh-client-connection/client'
-import type { CommandDecoration, CommandUiContract } from '@x1a0f3n9/dsh-client-ui-commands/client'
-import type {} from '@x1a0f3n9/dsh-client-ui-renderer/client'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { SessionId } from '@deepseek-ai/dsh-client-connection/client'
+import type { CommandDecoration, CommandUiContract } from '@deepseek-ai/dsh-client-ui-commands/client'
+import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 // Type-only: pulls the ctx.locale merge from the locale plugin.
-import type {} from '@x1a0f3n9/dsh-client-locale/client'
+import type {} from '@deepseek-ai/dsh-client-locale/client'
 import {
   rewindCandidatesFromHostText,
   rewindCandidatesOfChat,

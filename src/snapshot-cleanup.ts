@@ -21,7 +21,7 @@
 
 import { mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
-import { resolveDshHome } from '@x1a0f3n9/dsh-home-paths'
+import { resolveDshHome } from '@deepseek-ai/dsh-home-paths'
 import z from '@deepseek-ai/schemastery'
 
 /** The cleanup policy, as persisted under `~/.dsh/snapshot-cleanup.json`. */

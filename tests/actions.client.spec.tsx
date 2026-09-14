@@ -2,7 +2,7 @@
 
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
+import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
 import { TimelineActions } from '../src/client/actions.tsx'
 
 afterEach(cleanup)

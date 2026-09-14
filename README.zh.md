@@ -40,10 +40,10 @@ kind: "package-bundle"
 ### 安装到其它 profile
 
 ```sh
-xfdsh plugin --profile web add github:LunFengChen/dsh-session-timeline
+xfdsh plugin --profile web add @x1a0f3n9/dsh-session-timeline
 ```
 
-本包导出了 `dsh.bundle` patch，因此 profile 安装器可以通过标准插件机制挂载它。本仓库就是插件源码；xfdsh 预装 `github:LunFengChen/dsh-session-timeline`。
+本包导出了 `dsh.bundle` patch，因此 profile 安装器可以通过标准插件机制挂载它。本仓库就是插件源码。xfdsh 预装 npm 上的 `@x1a0f3n9/dsh-session-timeline`；`github:LunFengChen/dsh-session-timeline` 仍可作为源码回退。
 
 ### 回退对话
 
@@ -119,6 +119,6 @@ Host 端监听命令和工具 seam。它从会话事件日志生成纯回退计�
 <details>
 <summary>维护者工作上下文——点击展开</summary>
 
-包名是 `@x1a0f3n9/dsh-session-timeline`，没有 `@deepseek-ai` 别名。
+包名是 `@x1a0f3n9/dsh-session-timeline`。宿主和客户端 import 使用官方 `@deepseek-ai/dsh-*` 名，方便 xfdsh remap。
 
 </details>

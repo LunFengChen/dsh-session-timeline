@@ -2,8 +2,8 @@
  * Unit tests for the pure rewind planner (src/rewind.ts).
  */
 import { describe, expect, it } from 'vitest'
-import { boundContextSummary, createAssistantMessage, createUserMessage } from '@x1a0f3n9/dsh-llm'
-import type { SessionEvent, UserMessage } from '@x1a0f3n9/dsh-session'
+import { boundContextSummary, createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
+import type { SessionEvent, UserMessage } from '@deepseek-ai/dsh-session'
 import {
   formatCandidate, formatCandidateList, listRewindCandidates, markerStepOf, markerTurnOf, messagePreview, parseRewindTarget,
   planRewind, RewindError,
