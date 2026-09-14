@@ -40,6 +40,12 @@
     "LICENSE"
   ],
   "dsh": {
+    "plugin": {
+      "title": "Session timeline",
+      "titleZh": "会话时间线",
+      "description": "Rewind, delete, and regenerate conversation turns.",
+      "descriptionZh": "回退、删除并重新生成对话轮次。"
+    },
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
