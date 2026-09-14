@@ -1,14 +1,15 @@
 /** Timeline-owned destructive actions for durable conversation rows. */
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useState, type ReactNode } from 'react'
 import type { AttachmentIdType } from '@x1a0f3n9/dsh-attachment'
 import type { PromptContentPart } from '@x1a0f3n9/dsh-api-session-controller/types'
 import type { SessionFace } from '@x1a0f3n9/dsh-api-session-controller/client'
 import { SessionSeq } from '@x1a0f3n9/dsh-session/types'
 import {
-  IconRefreshOutline16, IconTrashOutline16, RiskConfirmation, Tooltip,
+  IconRefreshOutline16, IconTrashOutline16, RiskConfirmation, Toast, Tooltip,
 } from '@x1a0f3n9/dsh-client-ui-primitives'
 import type { RewindKey } from './locales.ts'
+import { rewindLog } from './log.ts'
 import { CLASS } from './styles.ts'
 
 export type TimelineActionTranslate = (key: RewindKey, params?: Record<string, unknown>) => string
@@ -17,43 +18,65 @@ interface TimelineActionsProps {
   readonly kind: 'user' | 'assistant'
   readonly seq: number
   readonly content?: readonly unknown[]
-  readonly session: SessionFace | undefined
+  readonly session?: SessionFace
+  readonly sessionOf?: () => SessionFace | undefined
   readonly t: TimelineActionTranslate
 }
 
 /**
  * Render timeline-owned deletion and regeneration controls.
- * @param props - the durable target, original user content, session face, and locale copy.
+ * @param props - the durable target, original user content, session resolvers, and locale copy.
  * @returns the action buttons and their acknowledgement dialog.
  */
-export function TimelineActions({ kind, seq, content, session, t }: TimelineActionsProps): ReactNode {
+export function TimelineActions({
+  kind, seq, content, session, sessionOf, t,
+}: TimelineActionsProps): ReactNode {
   const [action, setAction] = useState<'delete' | 'regenerate' | null>(null)
   const [acknowledged, setAcknowledged] = useState(false)
-  const busy = useRef(false)
+  const [pending, setPending] = useState(false)
+  const [toast, setToast] = useState<{ seq: number; text: string } | null>(null)
   const close = useCallback(() => {
     setAction(null)
     setAcknowledged(false)
+    setPending(false)
   }, [])
-  useEffect(() => () => { busy.current = false }, [])
+  const showError = useCallback((text: string) => {
+    setToast(current => ({ seq: (current?.seq ?? 0) + 1, text }))
+  }, [])
 
   const confirm = useCallback(() => {
     const selected = action
-    close()
-    if (selected === null || session === undefined || busy.current) return
-    busy.current = true
+    if (selected === null || pending) return
+    const face = sessionOf?.() ?? session
+    if (face === undefined) {
+      showError(t('action.noSession'))
+      return
+    }
+    setPending(true)
     void (async () => {
-      const prompt = selected === 'regenerate' && content !== undefined
-        ? await historyPromptContent(session, content)
-        : undefined
-      await session.cancel()
-      const deleted = await session.deleteFrom(SessionSeq(seq))
-      if (!deleted.ok) throw new Error(deleted.error.message)
-      if (selected === 'delete' || prompt === undefined) return
-      await session.prompt(prompt, 'queue')
-    })().catch((error) => {
-      console.error('dsh-session-timeline: timeline action failed', error)
-    }).finally(() => { busy.current = false })
-  }, [action, close, content, seq, session])
+      try {
+        const prompt = selected === 'regenerate' && content !== undefined
+          ? await historyPromptContent(face, content)
+          : undefined
+        await face.cancel()
+        const deleted = await face.deleteFrom(deletionSeq(seq))
+        if (!deleted.ok) throw new Error(deleted.error.message)
+        if (selected === 'regenerate') {
+          if (prompt === undefined) {
+            throw new Error(t('action.noPrompt'))
+          }
+          const queued = await face.prompt(prompt, 'queue')
+          if (!queued.ok) throw new Error(queued.error.message)
+        }
+        close()
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        rewindLog.error('actions', 'timeline action failed', error)
+        showError(t('action.failed', { message }))
+        setPending(false)
+      }
+    })()
+  }, [action, close, content, pending, seq, session, sessionOf, showError, t])
 
   return (
     <>
@@ -88,12 +111,31 @@ export function TimelineActions({ kind, seq, content, session, t }: TimelineActi
         closeLabel={t('confirm.close')}
         confirmLabel={action === 'regenerate' ? t('confirm.regenerate.confirm') : t('confirm.delete.confirm')}
         acknowledged={acknowledged}
+        disabled={pending}
         onAcknowledgedChange={setAcknowledged}
         onCancel={close}
         onConfirm={confirm}
       />
+      {toast !== null && (
+        <Toast
+          key={toast.seq}
+          text={toast.text}
+          onDone={() => { setToast(null) }}
+        />
+      )}
     </>
   )
+}
+
+/**
+ * Admit a chat-node sequence as a durable log position.
+ * Interrupted assistant fallbacks may carry a fractional display seq; truncation
+ * still addresses the containing integer event.
+ * @param seq - chat-node sequence from the conversation surface.
+ * @returns the durable deletion sequence.
+ */
+function deletionSeq(seq: number): SessionSeq {
+  return SessionSeq(Math.trunc(seq))
 }
 
 /**

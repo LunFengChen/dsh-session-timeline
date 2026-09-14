@@ -21,6 +21,9 @@ export declare const zh: {
     'confirm.close': string;
     'confirm.delete.confirm': string;
     'confirm.regenerate.confirm': string;
+    'action.failed': string;
+    'action.noSession': string;
+    'action.noPrompt': string;
     'popover.title': string;
     'popover.noText': string;
     'popover.retract.title': string;
@@ -90,6 +93,9 @@ export declare const en: {
     'confirm.close': string;
     'confirm.delete.confirm': string;
     'confirm.regenerate.confirm': string;
+    'action.failed': string;
+    'action.noSession': string;
+    'action.noPrompt': string;
     'popover.title': string;
     'popover.noText': string;
     'popover.retract.title': string;

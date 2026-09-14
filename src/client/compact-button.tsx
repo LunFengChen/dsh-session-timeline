@@ -9,7 +9,8 @@ import { CLASS } from './styles.ts'
 export type CompactButtonTranslate = (key: RewindKey, params?: Record<string, unknown>) => string
 
 interface CompactButtonProps {
-  readonly session: SessionFace | undefined
+  readonly session?: SessionFace
+  readonly sessionOf?: () => SessionFace | undefined
   readonly t: CompactButtonTranslate
 }
 
@@ -18,7 +19,7 @@ interface CompactButtonProps {
  * @param props - the live session face and locale copy.
  * @returns the compact control.
  */
-export function CompactButton({ session, t }: CompactButtonProps): ReactNode {
+export function CompactButton({ session, sessionOf, t }: CompactButtonProps): ReactNode {
   const busy = useRef(false)
   const toastSeq = useRef(0)
   const [toast, setToast] = useState<{ seq: number; text: string } | null>(null)
@@ -30,15 +31,20 @@ export function CompactButton({ session, t }: CompactButtonProps): ReactNode {
     setToast({ seq: toastSeq.current, text })
   }, [])
   const onClick = useCallback(() => {
-    if (session === undefined || busy.current) return
+    if (busy.current) return
+    const face = sessionOf?.() ?? session
+    if (face === undefined) {
+      showToast(t('action.noSession'))
+      return
+    }
     busy.current = true
-    void session.command('/compact').then((result) => {
+    void face.command('/compact').then((result) => {
       if (result.ok) return
       showToast(t('compact.failed', { message: result.error.message }))
     }).catch((error: unknown) => {
       showToast(t('compact.failed', { message: error instanceof Error ? error.message : String(error) }))
     }).finally(() => { busy.current = false })
-  }, [session, showToast, t])
+  }, [session, sessionOf, showToast, t])
 
   return (
     <>
@@ -47,7 +53,7 @@ export function CompactButton({ session, t }: CompactButtonProps): ReactNode {
           type="button"
           className={`${CLASS.button} ${CLASS.buttonLabeled}`}
           aria-label={t('button.compact.aria')}
-          disabled={session === undefined}
+          disabled={session === undefined && sessionOf === undefined}
           onMouseDown={keepFocus}
           onClick={onClick}
         >

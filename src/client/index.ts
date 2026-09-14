@@ -153,25 +153,46 @@ export function apply(ctx: ClientContext): void {
       createRewindBridge({ sessionOf, chatOf, currentSessionId, watchChat, setComposerText, t, subscribeLocale }),
     ))
 
-    const actionSession = (): SessionFace | undefined => {
-      const sessionId = currentSessionId()
-      return sessionId === undefined ? undefined : sessionOf(sessionId)
-    }
+    const faceOf = (sessionId: string | undefined): SessionFace | undefined =>
+      sessionId === undefined ? undefined : sessionOf(sessionId)
     yield slots.inject('conversation.chat.user-actions', () => slots.register(
       { name: 'conversation.chat.user-actions', id: 'dsh-session-timeline-user-actions', order: 1000 },
-      ({ seq, content }: { readonly seq: number; readonly content: readonly unknown[] }) => (
-        createElement(TimelineActions, { kind: 'user', seq, content, session: actionSession(), t })
+      ({ seq, content, sessionId }: {
+        readonly seq: number
+        readonly content: readonly unknown[]
+        readonly sessionId: string
+      }) => (
+        createElement(TimelineActions, {
+          kind: 'user',
+          seq,
+          content,
+          session: faceOf(sessionId),
+          sessionOf: () => faceOf(sessionId),
+          t,
+        })
       ),
     ))
     yield slots.inject('conversation.chat.assistant-actions', () => slots.register(
       { name: 'conversation.chat.assistant-actions', id: 'dsh-session-timeline-assistant-actions', order: 1000 },
-      ({ seq }: { readonly seq: number }) => (
-        createElement(TimelineActions, { kind: 'assistant', seq, session: actionSession(), t })
+      ({ seq, sessionId }: { readonly seq: number; readonly sessionId: string }) => (
+        createElement(TimelineActions, {
+          kind: 'assistant',
+          seq,
+          session: faceOf(sessionId),
+          sessionOf: () => faceOf(sessionId),
+          t,
+        })
       ),
     ))
     yield slots.inject('conversation.input.right', () => slots.register(
       { name: 'conversation.input.right', id: 'dsh-session-timeline-compact', order: 100 },
-      () => createElement(CompactButton, { session: actionSession(), t }),
+      ({ sessionId }: { readonly sessionId: string }) => (
+        createElement(CompactButton, {
+          session: faceOf(sessionId),
+          sessionOf: () => faceOf(sessionId),
+          t,
+        })
+      ),
     ))
 
     // ---- snapshot-cleanup settings card (Settings > Plugins > Plugin config) ----

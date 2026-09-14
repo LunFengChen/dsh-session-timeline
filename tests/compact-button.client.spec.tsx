@@ -45,4 +45,13 @@ describe('CompactButton', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.compact.aria' }))
     expect((await screen.findByRole('alert')).textContent).toBe('compact.failed')
   })
+
+  it('resolves the live session at click time instead of a stale render capture', async () => {
+    const session = sessionFace()
+    render(<CompactButton session={undefined} sessionOf={() => session} t={copy} />)
+    const button = screen.getByRole('button', { name: 'button.compact.aria' })
+    expect(button).toHaveProperty('disabled', false)
+    fireEvent.click(button)
+    await waitFor(() => expect(session.command).toHaveBeenCalledWith('/compact'))
+  })
 })

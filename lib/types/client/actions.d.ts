@@ -7,14 +7,15 @@ interface TimelineActionsProps {
     readonly kind: 'user' | 'assistant';
     readonly seq: number;
     readonly content?: readonly unknown[];
-    readonly session: SessionFace | undefined;
+    readonly session?: SessionFace;
+    readonly sessionOf?: () => SessionFace | undefined;
     readonly t: TimelineActionTranslate;
 }
 /**
  * Render timeline-owned deletion and regeneration controls.
- * @param props - the durable target, original user content, session face, and locale copy.
+ * @param props - the durable target, original user content, session resolvers, and locale copy.
  * @returns the action buttons and their acknowledgement dialog.
  */
-export declare function TimelineActions({ kind, seq, content, session, t }: TimelineActionsProps): ReactNode;
+export declare function TimelineActions({ kind, seq, content, session, sessionOf, t }: TimelineActionsProps): ReactNode;
 export {};
 //# sourceMappingURL=actions.d.ts.map

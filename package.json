@@ -1,6 +1,6 @@
 {
   "name": "@x1a0f3n9/dsh-session-timeline",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rewind, delete, and regenerate conversation turns for xfdsh / DeepSeek Harness.",
   "author": "LunFengChen",
   "license": "MIT",
