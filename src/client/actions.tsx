@@ -4,7 +4,7 @@ import { useCallback, useState, type ReactNode } from 'react'
 import type { AttachmentIdType } from '@deepseek-ai/dsh-attachment'
 import type { PromptContentPart } from '@deepseek-ai/dsh-api-session-controller/types'
 import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
+import { asSessionSeq } from './session-seq.ts'
 import {
   IconRefreshOutline16, IconTrashOutline16, RiskConfirmation, Toast, Tooltip,
 } from '@deepseek-ai/dsh-client-ui-primitives'
@@ -134,8 +134,8 @@ export function TimelineActions({
  * @param seq - chat-node sequence from the conversation surface.
  * @returns the durable deletion sequence.
  */
-function deletionSeq(seq: number): SessionSeq {
-  return SessionSeq(Math.trunc(seq))
+function deletionSeq(seq: number): ReturnType<typeof asSessionSeq> {
+  return asSessionSeq(Math.trunc(seq))
 }
 
 /**

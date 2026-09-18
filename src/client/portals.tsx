@@ -36,7 +36,7 @@ import {
 import { createPortal } from 'react-dom'
 import type { SessionFace } from '@deepseek-ai/dsh-api-session-controller/client'
 import type { UserMessageNode } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
+import { asSessionSeq } from './session-seq.ts'
 import { hiddenSeqsOf, messageTextAt, type ChatOf, type ChatWatch, type HiddenChat } from './hidden.ts'
 import type { RewindKey } from './locales.ts'
 import { messagePreviewOf } from './candidates.ts'
@@ -145,7 +145,7 @@ export async function runRewindAndFill(
         rewindLog.warn('refill', `file restore probe failed @${seq}`)
       }
     }
-    const deleted = await session.deleteFrom(SessionSeq(seq))
+    const deleted = await session.deleteFrom(asSessionSeq(seq))
     if (!deleted.ok) {
       showHint(deleted.error.message)
       return

@@ -42,8 +42,7 @@ const requested = new Set([
 ])
 const forkAlias = (specifier: string): string => specifier.replace(/^@deepseek-ai\/dsh-/, '@x1a0f3n9/dsh-')
 for (const specifier of [...requested]) requested.add(forkAlias(specifier))
-const isRequested = (specifier: string): boolean =>
-  requested.has(specifier) || isProductionDependency(specifier)
+const isRequested = (specifier: string): boolean => requested.has(specifier)
 
 export default defineConfig([
   {
@@ -74,6 +73,22 @@ export default defineConfig([
       neverBundle: isRequested,
       alwaysBundle: (specifier: string) => !isRequested(specifier),
     },
+    plugins: [{
+      name: 'forbid-host-session-require',
+      resolveId(source: string) {
+        if (
+          source === '@deepseek-ai/dsh-session'
+          || source.startsWith('@deepseek-ai/dsh-session/')
+          || source === '@x1a0f3n9/dsh-session'
+          || source.startsWith('@x1a0f3n9/dsh-session/')
+        ) {
+          throw new Error(
+            `client bundle must not import "${source}"; use a type-only import or a local helper`,
+          )
+        }
+        return null
+      },
+    }],
     define: {
       'process.env': '{}',
       'process.env.NODE_ENV': JSON.stringify('production'),

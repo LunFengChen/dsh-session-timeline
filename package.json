@@ -1,6 +1,6 @@
 {
   "name": "@x1a0f3n9/dsh-session-timeline",
-  "version": "0.1.5-xfdsh.1",
+  "version": "0.1.5-xfdsh.2",
   "description": "Rewind, delete, regenerate, and compact conversation turns for xfdsh / DeepSeek Harness.",
   "author": "LunFengChen",
   "license": "MIT",
@@ -63,7 +63,7 @@
     }
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && node scripts/check-client-externals.mjs",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
