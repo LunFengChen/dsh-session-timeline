@@ -24,7 +24,7 @@ import { useEffect, useState } from 'react'
  * imports; a cross-config test pins it equal to the host's constant. The
  * settings grammar forbids dots, so this is hyphenated.
  */
-export const CLEANUP_SETTINGS_NAMESPACE = 'dsh-session-timeline-snapshot-cleanup'
+export const CLEANUP_SETTINGS_NAMESPACE = 'dsh-session-timeline'
 
 /** The defaults the host uses; shown as the field placeholder until a draft. */
 export const DEFAULT_MAX_AGE_DAYS = 30

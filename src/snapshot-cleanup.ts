@@ -24,6 +24,10 @@ import { dirname, join } from 'node:path'
 import { resolveDshHome } from '@deepseek-ai/dsh-home-paths'
 import z from '@deepseek-ai/schemastery'
 
+function live<T>(schema: z<T>): z<T> {
+  return (schema as z<T> & { extra(key: string, value: boolean): z<T> }).extra('volatile', true)
+}
+
 /** The cleanup policy, as persisted under `~/.dsh/snapshot-cleanup.json`. */
 export interface CleanupConfig {
   readonly enabled: boolean
@@ -44,7 +48,7 @@ export const DEFAULT_CLEANUP_CONFIG: CleanupConfig = { enabled: false, maxAgeDay
  * Namespaces must match the settings provider's `^[a-z][a-z0-9-]*$` grammar (no
  * dots), so this is hyphenated, not dotted.
  */
-export const CLEANUP_SETTINGS_NAMESPACE = 'dsh-session-timeline-snapshot-cleanup'
+export const CLEANUP_SETTINGS_NAMESPACE = 'dsh-session-timeline'
 
 /**
  * The schemastery schema that persists + validates the cleanup policy in the
@@ -54,8 +58,17 @@ export const CLEANUP_SETTINGS_NAMESPACE = 'dsh-session-timeline-snapshot-cleanup
  * and a bad stored/user value cannot steer the sweep into deleting everything.
  */
 export const CleanupConfigSchema: z<CleanupConfig> = z.object({
-  enabled: z.boolean().default(DEFAULT_CLEANUP_CONFIG.enabled),
-  maxAgeDays: z.number().step(1).min(1).default(DEFAULT_CLEANUP_CONFIG.maxAgeDays),
+  enabled: live(z.boolean().default(DEFAULT_CLEANUP_CONFIG.enabled)),
+  maxAgeDays: live(z.number().step(1).min(1).default(DEFAULT_CLEANUP_CONFIG.maxAgeDays)),
+})
+
+/** Cordis Config: rewind host overrides plus live cleanup policy. */
+export const Config = z.object({
+  snapshotDir: z.string(),
+  dshHome: z.string(),
+  dedup: z.boolean().default(true),
+  enabled: live(z.boolean().default(DEFAULT_CLEANUP_CONFIG.enabled)),
+  maxAgeDays: live(z.number().step(1).min(1).default(DEFAULT_CLEANUP_CONFIG.maxAgeDays)),
 })
 
 /**

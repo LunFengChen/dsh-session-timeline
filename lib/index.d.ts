@@ -1,3 +1,4 @@
+import z from "@deepseek-ai/schemastery";
 import { Context } from "@deepseek-ai/cordis";
 
 //#region src/snapshot.d.ts
@@ -602,6 +603,22 @@ declare class SnapshotStore {
   }): Promise<ClearSessionReport>;
 }
 //#endregion
+//#region src/snapshot-cleanup.d.ts
+/** Cordis Config: rewind host overrides plus live cleanup policy. */
+declare const Config: z<Schemastery.ObjectS<{
+  snapshotDir: z<string, string>;
+  dshHome: z<string, string>;
+  dedup: z<boolean, boolean>;
+  enabled: z<boolean>;
+  maxAgeDays: z<number>;
+}>, Schemastery.ObjectT<{
+  snapshotDir: z<string, string>;
+  dshHome: z<string, string>;
+  dedup: z<boolean, boolean>;
+  enabled: z<boolean>;
+  maxAgeDays: z<number>;
+}>>;
+//#endregion
 //#region src/index.d.ts
 declare const name = "dsh-session-timeline";
 declare const inject: string[];
@@ -638,4 +655,4 @@ interface RewindConfig {
  */
 declare function apply(ctx: Context, config?: RewindConfig): void;
 //#endregion
-export { type CheckpointEntry, type FileImpact, type PruneStaleReport, type RestoreJournal, type RestoreJournalState, type RestoreOutcome, type RestoreReconcileReport, RewindConfig, SnapshotStore, apply, inject, name };
+export { type CheckpointEntry, Config, type FileImpact, type PruneStaleReport, type RestoreJournal, type RestoreJournalState, type RestoreOutcome, type RestoreReconcileReport, RewindConfig, SnapshotStore, apply, inject, name };

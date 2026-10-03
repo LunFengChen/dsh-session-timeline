@@ -39,7 +39,6 @@ import { execSessionCwd } from './session-cwd.ts'
 import { reconcileTracked, SnapshotStore, type ClearSessionReport, type PruneStaleReport, type RestoreOutcome } from './snapshot.ts'
 import {
   CLEANUP_SETTINGS_NAMESPACE,
-  CleanupConfigSchema,
   DEFAULT_CLEANUP_CONFIG,
   migrateLegacyCleanupConfig,
   parseCleanupCommand,
@@ -55,6 +54,8 @@ import {
 
 export { SnapshotStore } from './snapshot.ts'
 export type { CheckpointEntry, FileImpact, PruneStaleReport, RestoreOutcome, RestoreJournal, RestoreJournalState, RestoreReconcileReport } from './snapshot.ts'
+
+export { Config } from './snapshot-cleanup.ts'
 
 export const name = 'dsh-session-timeline'
 export const inject = ['commands', 'tools']
@@ -950,25 +951,37 @@ export function apply(ctx: Context, config?: RewindConfig): void {
   // was never set) leaves the default English — the ecosystem's neutral
   // fallback — without failing the plugin load.
   ctx.inject(['settings'], (settingsCtx) => {
-    // Read the durable locale preference from the registered settings namespace.
-    const section = readSettingsSection(
-      settingsCtx.settings as unknown as { get(namespace: string): unknown },
-      'locale',
-    ) as
+    const settings = settingsCtx.settings as unknown as {
+      describe: () => Array<{ ns: string; revision?: number; value?: unknown }>
+      update: (ns: string, patch: object, expectedRevision?: number) => Promise<void>
+      configure?: (presentation: { auto?: boolean }, owner?: unknown) => () => void
+    }
+    const section = readSettingsSection(settings, 'locale') as
       | { preference?: HostLocaleId }
       | undefined
     if (section?.preference === 'zh' || section?.preference === 'en') {
       activeLocale = section.preference
     }
 
-    // Register the cleanup namespace. The resolved settings scope validates
-    // and persists the user layer while keeping schema defaults and the
-    // composition base intact.
-    const cleanupScope = settingsCtx.settings.register(
-      CLEANUP_SETTINGS_NAMESPACE,
-      CleanupConfigSchema,
-      { base: DEFAULT_CLEANUP_CONFIG },
-    ) as unknown as CleanupSettingsScope
+    if (typeof settings.configure === 'function') {
+      settings.configure({ auto: false }, ctx.fiber)
+    }
+    const cleanupScope: CleanupSettingsScope = {
+      get() {
+        const row = settings.describe().find(candidate => candidate.ns === CLEANUP_SETTINGS_NAMESPACE)
+        const value = row?.value
+        if (typeof value !== 'object' || value === null) return { ...DEFAULT_CLEANUP_CONFIG }
+        const record = value as Partial<CleanupConfig>
+        return {
+          enabled: record.enabled ?? DEFAULT_CLEANUP_CONFIG.enabled,
+          maxAgeDays: record.maxAgeDays ?? DEFAULT_CLEANUP_CONFIG.maxAgeDays,
+        }
+      },
+      async update(patch) {
+        const row = settings.describe().find(candidate => candidate.ns === CLEANUP_SETTINGS_NAMESPACE)
+        await settings.update(CLEANUP_SETTINGS_NAMESPACE, patch, row?.revision)
+      },
+    }
     cleanupStore = settingsCleanupStore(cleanupScope)
     // One-time, idempotent migration of the pre-GUI file (see the module doc in
     // snapshot-cleanup.ts); every startup this is a cheap ENOENT read once the
